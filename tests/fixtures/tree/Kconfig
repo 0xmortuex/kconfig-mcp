@@ -1,0 +1,91 @@
+# Fixture tree for kconfig-mcp's unit tests. Small, but it exercises every
+# construct why_not has to reason about: depends on, select, imply, choice,
+# visible if, menuconfig/if blocks, defaults, tristate/modules, and an arch
+# directory picked by an environment variable (like Linux's SRCARCH).
+mainmenu "kconfig-mcp fixture ($(SRCARCH))"
+
+source "arch/$(SRCARCH)/Kconfig"
+
+config MODULES
+	bool "Loadable module support"
+	modules
+
+config NET
+	bool "Networking support"
+	default y
+	help
+	  Core networking.
+
+menuconfig WIRELESS
+	bool "Wireless"
+	depends on NET
+
+if WIRELESS
+
+config WIFI_DRIVER
+	tristate "Wi-Fi driver"
+	depends on PCI
+	select FIRMWARE_LOADER
+	imply LEDS
+	help
+	  A Wi-Fi driver for a PCI card.
+
+endif
+
+config FIRMWARE_LOADER
+	bool
+
+config LEDS
+	bool "LED support"
+
+config PCI
+	bool "PCI support"
+	depends on HAVE_PCI
+
+config DEBUG_KERNEL
+	bool "Kernel debugging"
+
+config SMALL_BUILD
+	bool "Optimize for size"
+	default y
+
+config DEBUG_VM
+	bool "Debug VM"
+	depends on DEBUG_KERNEL && !SMALL_BUILD
+
+config SMP
+	bool "Symmetric multi-processing"
+	depends on HAVE_SMP
+
+choice
+	prompt "Scheduler"
+	default SCHED_SIMPLE
+
+config SCHED_SIMPLE
+	bool "Simple scheduler"
+
+config SCHED_FAIR
+	bool "Fair scheduler"
+	depends on SMP
+
+endchoice
+
+config EXPERT
+	bool "Expert mode"
+
+menu "Expert options"
+	visible if EXPERT
+
+config HIDDEN_KNOB
+	bool "Hidden knob"
+
+endmenu
+
+config NO_NET
+	bool "Build without networking"
+	depends on !NET
+
+config LOG_LEVEL
+	int "Log level"
+	range 0 7
+	default 4

@@ -1,0 +1,47 @@
+[project]
+name = "kconfig-mcp"
+version = "0.1.0"
+description = "MCP server that explains Kconfig to AI agents: why can't I enable CONFIG_X? Unmet dependencies with file:line, and a verified minimal fix. Linux, Zephyr, U-Boot, Buildroot."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "0xmortuex" }]
+requires-python = ">=3.10"
+dependencies = ["mcp>=2.0.0", "kconfiglib==14.1.0"]
+keywords = ["mcp", "kconfig", "linux-kernel", "zephyr", "u-boot", "buildroot", "ai-agent"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: System :: Operating System Kernels :: Linux",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "anyio"]
+
+[project.urls]
+Homepage = "https://github.com/0xmortuex/kconfig-mcp"
+
+[project.scripts]
+kconfig-mcp = "kconfig_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kconfig_mcp"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
+[[tool.mypy.overrides]]
+# Kconfiglib ships no type stubs or py.typed marker. It's pinned to 14.1.0
+# because compat.py hooks its internals (_open, _fn_val).
+module = ["kconfiglib"]
+ignore_missing_imports = true

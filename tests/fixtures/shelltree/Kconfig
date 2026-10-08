@@ -1,0 +1,15 @@
+mainmenu "shell fixture"
+
+# The three $(shell,...) idioms real trees use: plain output, Linux's
+# if-success probe, and expr arithmetic on a version number.
+
+config GREETING
+	string
+	default "$(shell,echo hello)"
+
+config HAS_TRUE
+	def_bool $(shell,{ true; } >/dev/null 2>&1 && echo "y" || echo "n")
+
+config COMPILER_MAJOR
+	int
+	default $(shell,expr 130200 / 10000)

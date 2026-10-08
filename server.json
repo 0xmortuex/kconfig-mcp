@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.0xmortuex/kconfig-mcp",
+  "description": "Why can't I enable CONFIG_X? Explains Kconfig dependencies and finds a verified fix.",
+  "repository": {
+    "url": "https://github.com/0xmortuex/kconfig-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "kconfig-mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}
